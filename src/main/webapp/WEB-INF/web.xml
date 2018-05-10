@@ -1,0 +1,25 @@
+<!DOCTYPE web-app PUBLIC '-//Sun Microsystems, Inc.//DTD
+  Web Application 2.3//EN' 'http://java.sun.com/dtd/web-app_2_3.dtd'>
+ 
+<web-app>
+  <listener>
+    <listener-class>
+      students.logic.SessionListener
+    </listener-class>
+  </listener>
+
+  <servlet>
+    <servlet-name>database</servlet-name>
+    <servlet-class>students.web.DataBaseServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>database</servlet-name>
+    <url-pattern>/database/*</url-pattern>
+  </servlet-mapping>
+
+  <welcome-file-list>    
+    <welcome-file>index.jsp</welcome-file>  
+  </welcome-file-list>  
+ 
+</web-app>
