@@ -110,7 +110,6 @@ public class MySqlStudentDao implements StudentDao {
 
 	public void delete(Student student) throws DAOException {
 		PreparedStatement ps = null;
-		String str = null;
 
 		try {
 		ps = getPreparedStatement(DELETE_STUDENT);
