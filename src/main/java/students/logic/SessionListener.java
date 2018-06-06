@@ -11,11 +11,9 @@ public class SessionListener implements HttpSessionListener {
 
   public void sessionCreated(HttpSessionEvent event) {
 	HttpSession session = event.getSession();
-	StudentDao daoStudent = new MySqlStudentDao();
-	SubjectDao daoSubject = new MySqlSubjectDao();
+	StudentService studentService = new StudentService();
 	Logger logg = Logger.getLogger(SessionListener.class.getName());
-	session.setAttribute("student", daoStudent);
-	session.setAttribute("subject", daoSubject);
+	session.setAttribute("student", studentService);
 	session.setAttribute("logger", logg);
 
 	System.out.println("Session was CREATED: " + session);
@@ -23,21 +21,6 @@ public class SessionListener implements HttpSessionListener {
 
   public void sessionDestroyed(HttpSessionEvent event) {
 	HttpSession session = event.getSession();
-		StudentDao student = (MySqlStudentDao) session.getAttribute("student");
-		SubjectDao subject = (MySqlSubjectDao) session.getAttribute("subject");
-		Logger log = (Logger) session.getAttribute("logger");
-		try {
-			student.close();
-			System.out.println("daoSt was closed");
-		} catch(DAOException e) {
-			log.error(e);
-		}
-		try {	
-			subject.close();
-			System.out.println("daoSub was closed");
-		} catch(DAOException e) {
-			log.error(e);
-		}
 	System.out.println("Session was DELETED: " + session);
   }
 

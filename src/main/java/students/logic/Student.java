@@ -3,13 +3,22 @@ package students.logic;
 
 
 import java.util.*;
+import javax.persistence.*;
 
-
+@Entity
+@Table(name = "student")
 public class Student {
+
+	@Id
+        @Column(name = "id")
 	private Integer id;
 
+
+	@Column(name = "name")
 	private String name;
 
+
+	@Column(name = "surname")
 	private String surname;
 	
 	public Student(){
@@ -62,7 +71,7 @@ public class Student {
 
 	}
 	public String toString(){
-		return "Name: " + name +" Surname: " + surname;
+		return "Name: " + this.name +" Surname: " + this.surname;
 	}
 }
 
