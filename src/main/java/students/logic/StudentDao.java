@@ -66,21 +66,29 @@ public class StudentDao implements StudentDaoImpl {
     }
 
 	public Student findById(Integer id) {
+		openCurrentSession();
         	Student student = (Student) getCurrentSession().get(Student.class, id);
+		closeCurrentSession();
         	return student;
     	}
 
 	public List<Student> findAll() {
+		openCurrentSession();
         	List<Student> students = (List<Student>) getCurrentSession().createQuery("from Student").list();
+		closeCurrentSession();
         	return students;
     	}
 
 	public void update(Student entity) {
+		openCurrentSessionwithTransaction();
         	getCurrentSession().update(entity);
+		closeCurrentSessionwithTransaction();
     	}
 
 	public void delete(Student entity) {
+		openCurrentSessionwithTransaction();
         	getCurrentSession().delete(entity);
+		closeCurrentSessionwithTransaction();
     	}
 
 }
