@@ -16,28 +16,12 @@ public class StudentDao implements StudentDaoImpl {
 
     private Session currentSession;
 
-    private Transaction currentTransaction;
-
-    //public MySqlStudentDao() {
-    //}
-
     public Session openCurrentSession() {
         currentSession = getSessionFactory().openSession();
         return currentSession;
     }
 
-    public Session openCurrentSessionwithTransaction() {
-        currentSession = getSessionFactory().openSession();
-        currentTransaction = currentSession.beginTransaction();
-        return currentSession;
-    }
-
     public void closeCurrentSession() {
-        currentSession.close();
-    }
-
-    public void closeCurrentSessionwithTransaction() {
-        currentTransaction.commit();
         currentSession.close();
     }
 
@@ -57,14 +41,6 @@ public class StudentDao implements StudentDaoImpl {
         this.currentSession = currentSession;
     }
 
-    public Transaction getCurrentTransaction() {
-        return currentTransaction;
-    }
-
-    public void setCurrentTransaction(Transaction currentTransaction) {
-        this.currentTransaction = currentTransaction;
-    }
-
 	public Student findById(Integer id) {
 		openCurrentSession();
         	Student student = (Student) getCurrentSession().get(Student.class, id);
@@ -80,15 +56,17 @@ public class StudentDao implements StudentDaoImpl {
     	}
 
 	public void update(Student entity) {
-		openCurrentSessionwithTransaction();
+		Transaction currentTransaction = openCurrentSession().beginTransaction();
         	getCurrentSession().update(entity);
-		closeCurrentSessionwithTransaction();
+		currentTransaction.commit();
+		closeCurrentSession();
     	}
 
 	public void delete(Student entity) {
-		openCurrentSessionwithTransaction();
+		Transaction currentTransaction = openCurrentSession().beginTransaction();
         	getCurrentSession().delete(entity);
-		closeCurrentSessionwithTransaction();
+		currentTransaction.commit();
+		closeCurrentSession();
     	}
 
 }
