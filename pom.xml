@@ -113,11 +113,11 @@
       </plugins>
     </pluginManagement>
 
-    <!-- testResources -->
-      <!-- testResource -->
-        <!-- directory>src/test/resources</directory -->
-        <!-- filtering>true</filtering -->
-      <!-- /testResource -->
-    <!-- /testResources -->
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>true</filtering>
+      </testResource>
+    </testResources>
   </build>
 </project>

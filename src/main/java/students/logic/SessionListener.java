@@ -12,8 +12,10 @@ public class SessionListener implements HttpSessionListener {
   public void sessionCreated(HttpSessionEvent event) {
 	HttpSession session = event.getSession();
 	StudentService studentService = new StudentService();
+	SubjectService subjectService = new SubjectService();
 	Logger logg = Logger.getLogger(SessionListener.class.getName());
 	session.setAttribute("student", studentService);
+	session.setAttribute("subject", subjectService);
 	session.setAttribute("logger", logg);
 
 	System.out.println("Session was CREATED: " + session);
@@ -25,11 +27,3 @@ public class SessionListener implements HttpSessionListener {
   }
 
 }
-
-
-//System.out.println("STUDENT HASHCODE" + student.hashCode());
-//System.out.println("SUBJECT HASHCODE" + subject.hashCode());
-//System.out.println("STUDENT HASHCODE" + daoStudent.hashCode());
-//System.out.println("SUBJECT HASHCODE" + daoSubject.hashCode());
-//System.out.println("STUDENT HASHCODE" + studentMap.get(session.getId()).hashCode());
-//System.out.println("SUBJECT HASHCODE" + subjectMap.get(session.getId()).hashCode());

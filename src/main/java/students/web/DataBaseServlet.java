@@ -37,7 +37,7 @@ public class DataBaseServlet extends HttpServlet {
 			if(DB_URL.equals(url)){
 				showMenu(req, resp);
 			} else if(SUB_URL.equals(url)){
-			//	showSubjectsList(req, resp, session); 
+				showSubjectsList(req, resp, session); 
 			} else if(ST_URL.equals(url)) {
 				showStudentsList(req, resp, session); 
 			} else if(UP_URL.equals(url)) {
@@ -65,11 +65,11 @@ public class DataBaseServlet extends HttpServlet {
 		getServletContext().getRequestDispatcher("/jsp/notifyError.jsp").forward(req, resp);
 	}
 
-	//private void showSubjectsList(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
-	//	SubjectDao subDao = (MySqlSubjectDao) session.getAttribute("subject");
-	//	req.setAttribute("getAllSubjects", subDao.getAll());
-	//	getServletContext().getRequestDispatcher("/jsp/showSubjectsList.jsp").forward(req, resp);
-	//}
+	private void showSubjectsList(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
+		SubjectService subjectService = (SubjectService) session.getAttribute("subject");
+		req.setAttribute("getAllSubjects", subjectService.findAll());
+		getServletContext().getRequestDispatcher("/jsp/showSubjectsList.jsp").forward(req, resp);
+	}
 
 	private void showStudentsList(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
 		StudentService studentService = (StudentService) session.getAttribute("student");
@@ -79,24 +79,36 @@ public class DataBaseServlet extends HttpServlet {
 
 	private void update(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
 		StudentService studentService = (StudentService) session.getAttribute("student");
+		SubjectService subjectService = (SubjectService) session.getAttribute("subject");
 		Student st = new Student("Richard", "Prayor", 1);
+		Subject sub = new Subject("Russian", 7);
 		studentService.update(st);
+		subjectService.update(sub);
 		req.setAttribute("student", st);
+		req.setAttribute("subject", sub);
 		getServletContext().getRequestDispatcher("/jsp/update.jsp").forward(req, resp);
 	}
 
 	private void delete(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
 		StudentService studentService = (StudentService) session.getAttribute("student");
+		SubjectService subjectService = (SubjectService) session.getAttribute("subject");
 		Student st = new Student();
+		Subject sub = new Subject();
 		st.setId(5);
+		sub.setId(8);
 		studentService.delete(st.getId());
+		subjectService.delete(sub.getId());
 		req.setAttribute("student", st);
+		req.setAttribute("subject", sub);
 		getServletContext().getRequestDispatcher("/jsp/delete.jsp").forward(req, resp);
 	}
 
 	private void change(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
 		StudentService studentService = (StudentService) session.getAttribute("student");
+		SubjectService subjectService = (SubjectService) session.getAttribute("subject");
 		req.setAttribute("studentSchedule", studentService.findById(2));
+		req.setAttribute("subjectScheduleFirst", subjectService.findById(1));
+		req.setAttribute("subjectScheduleSecond", subjectService.findById(3));
 		getServletContext().getRequestDispatcher("/jsp/change.jsp").forward(req, resp);
 	}
 
