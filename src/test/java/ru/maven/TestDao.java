@@ -17,47 +17,39 @@ public class TestDao {
 		subjectService = new SubjectService();
 	}
 
-	//@AfterMethod
-	//public void tearDown() throws Exception {
-       // 	stDao.close();
-	//	subDao.close();
-	//}
-
-
-
 	@Test
-	public void testFindAll() throws Exception {
+	public void testStudentFindAll() throws Exception {
   		List<Student> list;
-		List<Subject> listSub;
   		list = studentService.findAll();
-		listSub = subjectService.findAll();
   		Assert.assertNotNull(list);
-  		Assert.assertTrue(list.size() > 0);
+	}
+
+	@Test
+	public void testSubjectFindAll() throws Exception {
+		List<Subject> listSub;
+		listSub = subjectService.findAll();
 		Assert.assertNotNull(listSub);
-  		Assert.assertTrue(listSub.size() > 0);
 	}
 
 	@Test
-	public void testfindById() throws Exception {
-		String str;
+	public void testSubjectFindById() throws Exception {
 		int i = 1;
-		str = subjectService.findById(i).toString();
-		Assert.assertNotNull(str);
-		Assert.assertTrue(str.length() >= 11);
-		i++;
-		str = studentService.findById(i).toString();
-		Assert.assertNotNull(str);
-		Assert.assertTrue(str.length() >= 29);
+		Subject sub = (Subject) subjectService.findById(i);
+		Assert.assertNotNull(sub);
 	}
 
 	@Test
-	public void testUpdate() throws Exception {
+	public void testStudentFindById() throws Exception {
+		int i = 2;
+		Student st = (Student) studentService.findById(i);
+		Assert.assertNotNull(st);
+	}
+
+	@Test
+	public void testStudentUpdate() throws Exception {
 		Student st = new Student("Richard", "Prayor", 1);
-		Subject sub = new Subject("Russian", 7);
 		studentService.update(st);
-		subjectService.update(sub);
 			Student stud = new Student();
-			Subject subject = new Subject();
 			List<Student> list = studentService.findAll();
 	   		Iterator<Student> i = list.iterator();
          		if (i.hasNext()) {
@@ -65,6 +57,13 @@ public class TestDao {
 				Assert.assertEquals(stud.getName(), "Richard");
 				Assert.assertEquals(stud.getSurname(), "Prayor");
             		}
+	}
+
+	@Test
+	public void testSubjectUpdate() throws Exception {
+		Subject sub = new Subject("Russian", 7);
+		subjectService.update(sub);
+			Subject subject = new Subject();
 			List<Subject> listSub = subjectService.findAll();
 			Iterator<Subject> iter = listSub.iterator();
          		for (int a = 0; iter.hasNext();) {
@@ -74,14 +73,11 @@ public class TestDao {
 			Assert.assertEquals(subject.getId().toString(), "7");
 	}
 
-	@Test(expectedExceptions = IllegalArgumentException.class)
-	public void testDelete() throws Exception {
+	@Test(expectedExceptions = { IllegalArgumentException.class, NoSuchElementException.class } )
+	public void testStudentDelete() throws Exception {
 		Student st = new Student();
-		Subject sub = new Subject();
 		st.setId(5);
-		sub.setId(8);
 		studentService.delete(st.getId());
-		subjectService.delete(sub.getId());
 			Student stud = new Student();
 			List<Student> list = studentService.findAll();
 			Iterator<Student> i = list.iterator();
@@ -90,6 +86,13 @@ public class TestDao {
 				stud = i.next();
 				Assert.assertEquals(stud.getId().toString(), String.valueOf(a));
 			}
+	}
+
+	@Test(expectedExceptions = { IllegalArgumentException.class, NoSuchElementException.class } )
+	public void testSubjectDelete() throws Exception {
+		Subject sub = new Subject();
+		sub.setId(8);
+		subjectService.delete(sub.getId());
 			Subject subject = new Subject();
 			List<Subject> listSub = subjectService.findAll();
 			Iterator<Subject> iter = listSub.iterator();

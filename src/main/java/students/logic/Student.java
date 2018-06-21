@@ -20,6 +20,12 @@ public class Student {
 
 	@Column(name = "surname")
 	private String surname;
+
+	@ManyToMany
+    	@JoinTable (name="student_subject",
+        	joinColumns=@JoinColumn (name="student_id"),
+        	inverseJoinColumns=@JoinColumn(name="subject_id"))
+    	private List<Subject> subjects;
 	
 	public Student(){
 	}
@@ -70,6 +76,15 @@ public class Student {
 		this.surname = surname;
 
 	}
+
+	public List<Subject> getSubjects() {
+		return subjects;
+	}
+
+	public void setSubjects(List<Subject> subjects) {
+		this.subjects = subjects;
+ 	}
+
 	public String toString(){
 		return "Name: " + this.name +" Surname: " + this.surname;
 	}

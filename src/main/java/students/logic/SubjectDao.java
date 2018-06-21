@@ -48,14 +48,16 @@ public class SubjectDao implements SubjectDaoImpl {
     	}
 
 	public void update(Subject entity) {
-		Transaction currentTransaction = openCurrentSession().beginTransaction();
+		openCurrentSession();
+		Transaction currentTransaction = getCurrentSession().beginTransaction();
         	getCurrentSession().update(entity);
 		currentTransaction.commit();
 		closeCurrentSession();
     	}
 
 	public void delete(Subject entity) {
-		Transaction currentTransaction = openCurrentSession().beginTransaction();
+		openCurrentSession();
+		Transaction currentTransaction = getCurrentSession().beginTransaction();
         	getCurrentSession().delete(entity);
 		currentTransaction.commit();
 		closeCurrentSession();

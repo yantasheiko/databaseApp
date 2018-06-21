@@ -56,14 +56,16 @@ public class StudentDao implements StudentDaoImpl {
     	}
 
 	public void update(Student entity) {
-		Transaction currentTransaction = openCurrentSession().beginTransaction();
+		openCurrentSession();
+		Transaction currentTransaction = getCurrentSession().beginTransaction();
         	getCurrentSession().update(entity);
 		currentTransaction.commit();
 		closeCurrentSession();
     	}
 
 	public void delete(Student entity) {
-		Transaction currentTransaction = openCurrentSession().beginTransaction();
+		openCurrentSession();
+		Transaction currentTransaction = getCurrentSession().beginTransaction();
         	getCurrentSession().delete(entity);
 		currentTransaction.commit();
 		closeCurrentSession();

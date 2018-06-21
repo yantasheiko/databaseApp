@@ -16,6 +16,12 @@ public class Subject {
 	@Column(name = "subject")
 	private String subject;
 
+	@ManyToMany
+    	@JoinTable(name="student_subject",
+        	joinColumns=@JoinColumn(name="subject_id"), 
+        	inverseJoinColumns=@JoinColumn(name="student_id"))
+    	private List<Student> students;
+
 	public Subject() {
 	}
 
@@ -51,6 +57,15 @@ public class Subject {
 
 	}
 
+
+
+	public List<Student> getStudents() {
+		return students;
+	}
+
+	public void setStudents(List<Student> students) {
+		this.students = students;
+ 	}
 
 	public String toString(){
 		return "Subject: " + this.subject;
