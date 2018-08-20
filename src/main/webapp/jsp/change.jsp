@@ -1,4 +1,6 @@
-<%@ page import = "students.logic.*"  %>
+<%@ page import = "students.logic.dao.*"  %>
+<%@ page import = "students.logic.dto.*"  %>
+<%@ page import = "students.logic.services.*"  %>
 <%@ page import = "students.web.*"  %>
 <%@ page import = "java.io.*"  %>
 <%@ page import = "java.util.*"  %>

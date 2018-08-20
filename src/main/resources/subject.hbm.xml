@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <class name="students.logic.dto.Subject" table="subject" catalog="lesson10">
+        <id name="subjectId" type="java.lang.Integer">
+            <column name="subjectId" />
+            <generator class="identity" />
+        </id>
+        <property name="subject" type="string">
+            <column name="subject" length="20" not-null="true" unique="true" />
+        </property>
+        <set name="students" table="student_subject" 
+        	inverse="false" lazy="true" fetch="select" cascade="all" >
+            <key>
+                <column name="subjectId" not-null="true" />
+            </key>
+            <many-to-many entity-name="students.logic.dto.Student">
+                <column name="studentId" not-null="true" />
+            </many-to-many>
+        </set>
+    </class>
+</hibernate-mapping>

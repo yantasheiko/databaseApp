@@ -1,6 +1,6 @@
-package students.logic;
+package students.logic.dao;
 
-import students.logic.*;
+import students.logic.dto.*;
 
 import java.sql.*;
 import java.util.*;
@@ -10,26 +10,20 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 public class SubjectDao implements SubjectDaoImpl {
 
 	private Session currentSession;
-
-    public Session openCurrentSession() {
-        currentSession = getSessionFactory().openSession();
-        return currentSession;
-    }
-
-    public void closeCurrentSession() {
-        currentSession.close();
-    }
+	private static SessionFactory sessionFactory;
 
     private static SessionFactory getSessionFactory() {
-        Configuration configuration = new Configuration().configure();
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-                .applySettings(configuration.getProperties());
-        SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
         return sessionFactory;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        	this.sessionFactory = sessionFactory;
     }
 
     public Session getCurrentSession() {
@@ -41,34 +35,38 @@ public class SubjectDao implements SubjectDaoImpl {
     }
 
 	public Subject findById(Integer id) {
-		openCurrentSession();
+		currentSession = getSessionFactory().openSession();
         	Subject subject = (Subject) getCurrentSession().get(Subject.class, id);
-		closeCurrentSession();
+		currentSession.close();
         	return subject;
     	}
 
 	public void update(Subject entity) {
-		openCurrentSession();
+		currentSession = getSessionFactory().openSession();
 		Transaction currentTransaction = getCurrentSession().beginTransaction();
         	getCurrentSession().update(entity);
 		currentTransaction.commit();
-		closeCurrentSession();
+		currentSession.close();
     	}
 
 	public void delete(Subject entity) {
-		openCurrentSession();
+		currentSession = getSessionFactory().openSession();
 		Transaction currentTransaction = getCurrentSession().beginTransaction();
         	getCurrentSession().delete(entity);
 		currentTransaction.commit();
-		closeCurrentSession();
+		currentSession.close();
     	}
 
 	public List<Subject> findAll() {
-		openCurrentSession();
+		currentSession = getSessionFactory().openSession();
         	List<Subject> subjects = (List<Subject>) getCurrentSession().createQuery("from Subject").list();
-		closeCurrentSession();
+		currentSession.close();
         	return subjects;
     	}
+
+	public void close(){
+		sessionFactory.close();
+	}
 
 
 }

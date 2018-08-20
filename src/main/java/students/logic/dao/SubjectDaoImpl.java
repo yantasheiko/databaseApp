@@ -1,6 +1,6 @@
-package students.logic;
+package students.logic.dao;
 
-import students.logic.*;
+import students.logic.dto.*;
 import java.util.List;
 import java.sql.*;
 

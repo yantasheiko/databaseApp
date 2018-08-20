@@ -1,6 +1,6 @@
-package students.logic;
+package students.logic.dao;
 
-import students.logic.*;
+import students.logic.dto.*;
 
 import java.sql.*;
 import java.util.*;
@@ -10,27 +10,20 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 public class StudentDao implements StudentDaoImpl {
 
     private Session currentSession;
-
-    public Session openCurrentSession() {
-        currentSession = getSessionFactory().openSession();
-        return currentSession;
-    }
-
-    public void closeCurrentSession() {
-        currentSession.close();
-    }
+    private static SessionFactory sessionFactory;
 
     private static SessionFactory getSessionFactory() {
-        Configuration configuration = new Configuration().configure();
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-                .applySettings(configuration.getProperties());
-        SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
         return sessionFactory;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        	this.sessionFactory = sessionFactory;
     }
 
     public Session getCurrentSession() {
@@ -42,34 +35,38 @@ public class StudentDao implements StudentDaoImpl {
     }
 
 	public Student findById(Integer id) {
-		openCurrentSession();
+		currentSession = getSessionFactory().openSession();
         	Student student = (Student) getCurrentSession().get(Student.class, id);
-		closeCurrentSession();
+		currentSession.close();
         	return student;
     	}
 
 	public List<Student> findAll() {
-		openCurrentSession();
+		currentSession = getSessionFactory().openSession();
         	List<Student> students = (List<Student>) getCurrentSession().createQuery("from Student").list();
-		closeCurrentSession();
+		currentSession.close();
         	return students;
     	}
 
 	public void update(Student entity) {
-		openCurrentSession();
+		currentSession = getSessionFactory().openSession();
 		Transaction currentTransaction = getCurrentSession().beginTransaction();
         	getCurrentSession().update(entity);
 		currentTransaction.commit();
-		closeCurrentSession();
+		currentSession.close();
     	}
 
 	public void delete(Student entity) {
-		openCurrentSession();
+		currentSession = getSessionFactory().openSession();
 		Transaction currentTransaction = getCurrentSession().beginTransaction();
         	getCurrentSession().delete(entity);
 		currentTransaction.commit();
-		closeCurrentSession();
+		currentSession.close();
     	}
+
+	public void close(){
+		sessionFactory.close();
+	}
 
 }
 

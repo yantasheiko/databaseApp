@@ -1,0 +1,73 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<beans xmlns = "http://www.springframework.org/schema/beans"
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+   <bean id="placeholderConfig"
+	class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	<property name="location">
+		<value>/WEB-INF/database.properties</value>
+	</property>
+   </bean>
+
+   <bean id="dataSource" 
+         class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<property name="driverClassName" value="${database.driverClassName}" />
+	<property name="url" value="${database.url}" />
+	<property name="username" value="${database.user}" />
+	<property name="password" value="${database.pass}" />
+   </bean>
+
+   <!-- Hibernate session factory -->
+   <bean id="sessionFactory" 
+     class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+
+    <property name="dataSource">
+      <ref bean="dataSource"/>
+    </property>
+
+    <property name="hibernateProperties">
+       <props>
+         <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+         <prop key="hibernate.show_sql">true</prop>
+	 <prop key="hibernate.hbm2ddl.auto">update</prop>
+       </props>
+     </property>
+    	<!-- mappingResources -->
+     <property name="mappingResources">
+	<list>
+           <value>student.hbm.xml</value>
+	   <value>subject.hbm.xml</value>
+	</list>
+      </property>	
+
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+   <!-- STUDENT Data Access Object -->
+   <bean id="studentDao" class="students.logic.dao.StudentDao">
+   		<property name="sessionFactory" ref="sessionFactory"></property>
+   </bean>
+
+    <!-- STUDENT business object(Service) -->
+   <bean id="studentService" class="students.logic.services.StudentService">
+   		<property name="studentDao" ref="studentDao"/>
+   </bean>
+
+   <!-- SUBJECT Data Access Object -->
+   <bean id="subjectDao" class="students.logic.dao.SubjectDao">
+   		<property name="sessionFactory" ref="sessionFactory"></property>
+   </bean>
+
+    <!-- SUBJECT business object(Service) -->
+   <bean id="subjectService" class="students.logic.services.SubjectService">
+   		<property name="subjectDao" ref="subjectDao"/>
+   </bean>
+
+
+</beans>

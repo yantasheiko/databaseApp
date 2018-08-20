@@ -3,10 +3,17 @@
  
 <web-app>
   <listener>
-    <listener-class>
-      students.logic.SessionListener
-    </listener-class>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
+
+  <listener>
+        <listener-class>students.logic.SessionListener</listener-class>
+  </listener>
+
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/applicationContext.xml</param-value>
+  </context-param>
 
   <servlet>
     <servlet-name>database</servlet-name>

@@ -1,4 +1,4 @@
-package students.logic;
+package students.logic.dao;
 
 public class DAOException extends Exception {
 
