@@ -22,6 +22,8 @@ import org.springframework.web.context.*;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 public class DataBaseServlet extends HttpServlet {
 
@@ -33,9 +35,14 @@ public class DataBaseServlet extends HttpServlet {
     private static final String DEL_URL = "/databaseApp/database/delete";
     private static final String CHANGE_URL = "/databaseApp/database/change";
     private ApplicationContext context;
-
+    @Autowired
+    private SubjectService subjectService;
+    @Autowired
+    private StudentService studentService;
+    
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
 		ServletContext servletContext = this.getServletContext();
 		this.context = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
 	}
@@ -43,10 +50,6 @@ public class DataBaseServlet extends HttpServlet {
    	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	
 	HttpSession session = req.getSession();
-	SubjectService subjectService = (SubjectService) context.getBean("subjectService");
-	StudentService studentService = (StudentService) context.getBean("studentService");
-	session.setAttribute("student", studentService);
-	session.setAttribute("subject", subjectService);
 	resp.setContentType("text/html; charset = utf-8");
 	String url = req.getRequestURI().toString();
 
@@ -84,24 +87,24 @@ public class DataBaseServlet extends HttpServlet {
 	}
 
 	private void showSubjectsList(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
-		SubjectService subjectService = (SubjectService) context.getBean("subjectService");
-		//SubjectService subjectService = (SubjectService) session.getAttribute("subject");
+		subjectService = new SubjectService();
+		//SubjectService subjectService = (SubjectService) context.getBean("subjectService");
 		req.setAttribute("getAllSubjects", subjectService.findAll());
 		getServletContext().getRequestDispatcher("/jsp/showSubjectsList.jsp").forward(req, resp);
 	}
 
 	private void showStudentsList(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
-		StudentService studentService = (StudentService) context.getBean("studentService");
-		//StudentService studentService = (StudentService) session.getAttribute("student");
+		studentService = new StudentService();
+		//StudentService studentService = (StudentService) context.getBean("studentService");
 		req.setAttribute("getAllStudents", studentService.findAll());
 		getServletContext().getRequestDispatcher("/jsp/showStudentsList.jsp").forward(req, resp);
 	}
 
 	private void update(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
-		SubjectService subjectService = (SubjectService) context.getBean("subjectService");
-		StudentService studentService = (StudentService) context.getBean("studentService");
-		//StudentService studentService = (StudentService) session.getAttribute("student");
-		//SubjectService subjectService = (SubjectService) session.getAttribute("subject");
+		subjectService = new SubjectService();
+		studentService = new StudentService();
+		//SubjectService subjectService = (SubjectService) context.getBean("subjectService");
+		//StudentService studentService = (StudentService) context.getBean("studentService");
 		Student st = new Student("Richard", "Prayor", 1);
 		Subject sub = new Subject("Russian", 7);
 		studentService.update(st);
@@ -112,10 +115,10 @@ public class DataBaseServlet extends HttpServlet {
 	}
 
 	private void delete(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
-		SubjectService subjectService = (SubjectService) context.getBean("subjectService");
-		StudentService studentService = (StudentService) context.getBean("studentService");
-		//StudentService studentService = (StudentService) session.getAttribute("student");
-		//SubjectService subjectService = (SubjectService) session.getAttribute("subject");
+		subjectService = new SubjectService();
+		studentService = new StudentService();
+		//SubjectService subjectService = (SubjectService) context.getBean("subjectService");
+		//StudentService studentService = (StudentService) context.getBean("studentService");
 		Student st = new Student();
 		Subject sub = new Subject();
 		st.setStudentId(5);
@@ -128,10 +131,10 @@ public class DataBaseServlet extends HttpServlet {
 	}
 
 	private void change(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
-		SubjectService subjectService = (SubjectService) context.getBean("subjectService");
-		StudentService studentService = (StudentService) context.getBean("studentService");
-		//StudentService studentService = (StudentService) session.getAttribute("student");
-		//SubjectService subjectService = (SubjectService) session.getAttribute("subject");
+		subjectService = new SubjectService();
+		studentService = new StudentService();
+		//SubjectService subjectService = (SubjectService) context.getBean("subjectService");
+		//StudentService studentService = (StudentService) context.getBean("studentService");
 		req.setAttribute("studentSchedule", studentService.findById(2));
 		req.setAttribute("subjectScheduleFirst", subjectService.findById(1));
 		req.setAttribute("subjectScheduleSecond", subjectService.findById(3));
