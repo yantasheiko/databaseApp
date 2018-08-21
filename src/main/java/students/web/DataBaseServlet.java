@@ -87,24 +87,16 @@ public class DataBaseServlet extends HttpServlet {
 	}
 
 	private void showSubjectsList(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
-		subjectService = new SubjectService();
-		//SubjectService subjectService = (SubjectService) context.getBean("subjectService");
 		req.setAttribute("getAllSubjects", subjectService.findAll());
 		getServletContext().getRequestDispatcher("/jsp/showSubjectsList.jsp").forward(req, resp);
 	}
 
 	private void showStudentsList(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
-		studentService = new StudentService();
-		//StudentService studentService = (StudentService) context.getBean("studentService");
 		req.setAttribute("getAllStudents", studentService.findAll());
 		getServletContext().getRequestDispatcher("/jsp/showStudentsList.jsp").forward(req, resp);
 	}
 
 	private void update(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
-		subjectService = new SubjectService();
-		studentService = new StudentService();
-		//SubjectService subjectService = (SubjectService) context.getBean("subjectService");
-		//StudentService studentService = (StudentService) context.getBean("studentService");
 		Student st = new Student("Richard", "Prayor", 1);
 		Subject sub = new Subject("Russian", 7);
 		studentService.update(st);
@@ -115,10 +107,6 @@ public class DataBaseServlet extends HttpServlet {
 	}
 
 	private void delete(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
-		subjectService = new SubjectService();
-		studentService = new StudentService();
-		//SubjectService subjectService = (SubjectService) context.getBean("subjectService");
-		//StudentService studentService = (StudentService) context.getBean("studentService");
 		Student st = new Student();
 		Subject sub = new Subject();
 		st.setStudentId(5);
@@ -131,10 +119,6 @@ public class DataBaseServlet extends HttpServlet {
 	}
 
 	private void change(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
-		subjectService = new SubjectService();
-		studentService = new StudentService();
-		//SubjectService subjectService = (SubjectService) context.getBean("subjectService");
-		//StudentService studentService = (StudentService) context.getBean("studentService");
 		req.setAttribute("studentSchedule", studentService.findById(2));
 		req.setAttribute("subjectScheduleFirst", subjectService.findById(1));
 		req.setAttribute("subjectScheduleSecond", subjectService.findById(3));
