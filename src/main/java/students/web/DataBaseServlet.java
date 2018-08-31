@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionListener;
+//import javax.servlet.http.HttpSessionListener;
 import javax.servlet.*;
 import java.net.URL;
 import org.apache.log4j.Logger;
@@ -16,7 +16,8 @@ import org.apache.log4j.Logger;
 import students.logic.dto.*;
 import students.logic.dao.*;
 import students.logic.services.*;
-import students.logic.*;
+//import students.logic.*;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.*;
 import org.springframework.web.context.*;
 import org.springframework.context.annotation.*;
@@ -34,22 +35,11 @@ public class DataBaseServlet extends HttpServlet {
     private static final String UP_URL = "/databaseApp/database/update";
     private static final String DEL_URL = "/databaseApp/database/delete";
     private static final String CHANGE_URL = "/databaseApp/database/change";
-    private ApplicationContext context;
-    @Autowired
-    private SubjectService subjectService;
-    @Autowired
-    private StudentService studentService;
-    
-	public void init(ServletConfig config) throws ServletException {
-		super.init(config);
-		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
-		ServletContext servletContext = this.getServletContext();
-		this.context = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
-	}
 
    	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	
 	HttpSession session = req.getSession();
+	ServletContext sc = req.getServletContext();
 	resp.setContentType("text/html; charset = utf-8");
 	String url = req.getRequestURI().toString();
 
@@ -58,15 +48,15 @@ public class DataBaseServlet extends HttpServlet {
 			if(DB_URL.equals(url)){
 				showMenu(req, resp);
 			} else if(SUB_URL.equals(url)){
-				showSubjectsList(req, resp, session); 
+				showSubjectsList(req, resp, sc); 
 			} else if(ST_URL.equals(url)) {
-				showStudentsList(req, resp, session); 
+				showStudentsList(req, resp, sc); 
 			} else if(UP_URL.equals(url)) {
-				update(req, resp, session); 
+				update(req, resp, sc); 
 			} else if(DEL_URL.equals(url)) {
-				delete(req, resp, session); 
+				delete(req, resp, sc); 
 			} else if(CHANGE_URL.equals(url)) {
-				change(req, resp, session); 
+				change(req, resp, sc); 
 			}
 	
 	} catch(DAOException e) {
@@ -86,17 +76,21 @@ public class DataBaseServlet extends HttpServlet {
 		getServletContext().getRequestDispatcher("/jsp/notifyError.jsp").forward(req, resp);
 	}
 
-	private void showSubjectsList(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
+	private void showSubjectsList(HttpServletRequest req, HttpServletResponse resp, ServletContext sc) throws ServletException, DAOException, IOException {
+		SubjectService subjectService = (SubjectService) sc.getAttribute("subject");
 		req.setAttribute("getAllSubjects", subjectService.findAll());
 		getServletContext().getRequestDispatcher("/jsp/showSubjectsList.jsp").forward(req, resp);
 	}
 
-	private void showStudentsList(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
+	private void showStudentsList(HttpServletRequest req, HttpServletResponse resp, ServletContext sc) throws ServletException, DAOException, IOException {
+		StudentService studentService = (StudentService) sc.getAttribute("student");
 		req.setAttribute("getAllStudents", studentService.findAll());
 		getServletContext().getRequestDispatcher("/jsp/showStudentsList.jsp").forward(req, resp);
 	}
 
-	private void update(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
+	private void update(HttpServletRequest req, HttpServletResponse resp, ServletContext sc) throws ServletException, DAOException, IOException {
+		StudentService studentService = (StudentService) sc.getAttribute("student");
+		SubjectService subjectService = (SubjectService) sc.getAttribute("subject");
 		Student st = new Student("Richard", "Prayor", 1);
 		Subject sub = new Subject("Russian", 7);
 		studentService.update(st);
@@ -106,7 +100,9 @@ public class DataBaseServlet extends HttpServlet {
 		getServletContext().getRequestDispatcher("/jsp/update.jsp").forward(req, resp);
 	}
 
-	private void delete(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
+	private void delete(HttpServletRequest req, HttpServletResponse resp, ServletContext sc) throws ServletException, DAOException, IOException {
+		StudentService studentService = (StudentService) sc.getAttribute("student");
+		SubjectService subjectService = (SubjectService) sc.getAttribute("subject");
 		Student st = new Student();
 		Subject sub = new Subject();
 		st.setStudentId(5);
@@ -118,7 +114,9 @@ public class DataBaseServlet extends HttpServlet {
 		getServletContext().getRequestDispatcher("/jsp/delete.jsp").forward(req, resp);
 	}
 
-	private void change(HttpServletRequest req, HttpServletResponse resp, HttpSession session) throws ServletException, DAOException, IOException {
+	private void change(HttpServletRequest req, HttpServletResponse resp, ServletContext sc) throws ServletException, DAOException, IOException {
+		StudentService studentService = (StudentService) sc.getAttribute("student");
+		SubjectService subjectService = (SubjectService) sc.getAttribute("subject");
 		req.setAttribute("studentSchedule", studentService.findById(2));
 		req.setAttribute("subjectScheduleFirst", subjectService.findById(1));
 		req.setAttribute("subjectScheduleSecond", subjectService.findById(3));

@@ -2,18 +2,19 @@
   Web Application 2.3//EN' 'http://java.sun.com/dtd/web-app_2_3.dtd'>
  
 <web-app>
-  <listener>
+
+<context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/applicationContext.xml</param-value>
+    </context-param>
+
+    <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
+    </listener>
 
-  <listener>
-        <listener-class>students.logic.SessionListener</listener-class>
+    <listener>
+        <listener-class>students.logic.AppListener</listener-class>
   </listener>
-
-  <context-param>
-    <param-name>contextConfigLocation</param-name>
-    <param-value>/WEB-INF/applicationContext.xml</param-value>
-  </context-param>
 
   <servlet>
     <servlet-name>database</servlet-name>
