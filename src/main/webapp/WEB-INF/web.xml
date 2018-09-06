@@ -12,10 +12,6 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-    <listener>
-        <listener-class>students.logic.AppListener</listener-class>
-  </listener>
-
   <servlet>
     <servlet-name>database</servlet-name>
     <servlet-class>students.web.DataBaseServlet</servlet-class>
