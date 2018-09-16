@@ -3,7 +3,44 @@
 <%@ page import = "java.io.*"  %>
 <%@ page import = "java.util.*"  %>
 
-<html><head><title>Lists from Database</title></head><body>
+<html><head><title>Lists from Database</title></head>
+
+<script type="text/javascript">
+function ajaxAsyncRequest(reqURL){
+
+    var xmlhttp;
+    if (window.XMLHttpRequest){
+        xmlhttp = new XMLHttpRequest(); //for IE7+, Firefox, Chrome, Opera, Safari
+    } else {
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); //for IE6, IE5
+    }
+
+    xmlhttp.open("GET", reqURL, true);
+
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4) {
+            if (xmlhttp.status == 200)
+            {
+                document.getElementById("message").innerHTML = xmlhttp.responseText;
+            }
+            else
+            {
+		//alert(xmlhttp.responseText);
+                alert('Something is wrong !!');
+            }
+        }
+    };
+     
+    xmlhttp.send(null);
+}
+</script>
+<body>
+
+<br/>
+<input type="button" value="Show Server Time" onclick='ajaxAsyncRequest("database/*")'/>
+<br/><br/>
+	Message from server :: <span id="message"></span>
+
 <header>
     	<h1>Lists of students and subjects from database</h1>
 </header>

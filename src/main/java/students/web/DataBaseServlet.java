@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-//import javax.servlet.http.HttpSessionListener;
 import javax.servlet.*;
 import java.net.URL;
 import org.apache.log4j.Logger;
@@ -16,7 +15,6 @@ import org.apache.log4j.Logger;
 import students.logic.dto.*;
 import students.logic.dao.*;
 import students.logic.services.*;
-//import students.logic.*;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.*;
 import org.springframework.web.context.*;
@@ -49,8 +47,14 @@ public class DataBaseServlet extends HttpServlet {
    	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	
 	HttpSession session = req.getSession();
-	resp.setContentType("text/html; charset = utf-8");
+	resp.setContentType("text/html; charset = utf-8"); 
 	String url = req.getRequestURI().toString();
+	resp.setHeader("Cache-Control", "no-cache");
+        resp.setHeader("Pragma", "no-cache");
+        PrintWriter out = resp.getWriter();
+        Date currentTime = new Date();
+        String message = String.format("Currently time is %tr on %tD.",currentTime, currentTime);
+	out.print(message);
 
 	try {
 
