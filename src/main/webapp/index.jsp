@@ -3,43 +3,35 @@
 <%@ page import = "java.io.*"  %>
 <%@ page import = "java.util.*"  %>
 
-<html><head><title>Lists from Database</title></head>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Lists from Database</title>
 
-<script type="text/javascript">
-function ajaxAsyncRequest(reqURL){
+<script src="http://code.jquery.com/jquery-latest.js">   
+        </script>
+        <script>
+            $(document).ready(function() {                        
+                $('#submit').click(function(event) {  
+                    var username=$('#user').val();
+                 $.get('database/*',{user:username},function(responseText) { 
+                        $('#welcometext').text(responseText);         
+                    });
+                });
+            });
+        </script>
+</head>
 
-    var xmlhttp;
-    if (window.XMLHttpRequest){
-        xmlhttp = new XMLHttpRequest(); //for IE7+, Firefox, Chrome, Opera, Safari
-    } else {
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); //for IE6, IE5
-    }
-
-    xmlhttp.open("GET", reqURL, true);
-
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4) {
-            if (xmlhttp.status == 200)
-            {
-                document.getElementById("message").innerHTML = xmlhttp.responseText;
-            }
-            else
-            {
-		//alert(xmlhttp.responseText);
-                alert('Something is wrong !!');
-            }
-        }
-    };
-     
-    xmlhttp.send(null);
-}
-</script>
 <body>
 
-<br/>
-<input type="button" value="Show Server Time" onclick='ajaxAsyncRequest("database/*")'/>
-<br/><br/>
-	Message from server :: <span id="message"></span>
+<form id="form1">
+<h1>AJAX Demo using Jquery in JSP and Servlet</h1>
+Enter your Name:
+<input type="text" id="user"/>
+<input type="button" id="submit" value="Ajax Submit"/>
+ 
+<div id="welcometext"></div>
+</form>
 
 <header>
     	<h1>Lists of students and subjects from database</h1>

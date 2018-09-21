@@ -49,12 +49,15 @@ public class DataBaseServlet extends HttpServlet {
 	HttpSession session = req.getSession();
 	resp.setContentType("text/html; charset = utf-8"); 
 	String url = req.getRequestURI().toString();
-	resp.setHeader("Cache-Control", "no-cache");
-        resp.setHeader("Pragma", "no-cache");
-        PrintWriter out = resp.getWriter();
-        Date currentTime = new Date();
-        String message = String.format("Currently time is %tr on %tD.",currentTime, currentTime);
-	out.print(message);
+	String name = null;
+	name = "hello " + req.getParameter("user");
+	if(req.getParameter("user").toString().equals("")){
+		name = "Hello User";
+	}
+
+	resp.setContentType("text/plain");
+	resp.setCharacterEncoding("UTF-8");
+	resp.getWriter().write(name);
 
 	try {
 
